@@ -182,6 +182,17 @@ var _ = Describe("Contour Ytt Templates", func() {
 			Expect(err).To(ContainSubstring("envoy.service.aws.loadBalancerType must be either classic or nlb when infrastructureProvider is aws"))
 		})
 	})
+
+	Context("Invalid Envoy service annotations", func() {
+		BeforeEach(func() {
+			values = invalidEnvoyServiceAnnotations
+		})
+
+		It("renders with an error", func() {
+			Expect(err).To(HaveOccurred())
+			Expect(err).To(ContainSubstring("envoy.service.annotations must be a key/value map"))
+		})
+	})
 	// END validation tests
 
 	// START Envoy service defaulting
@@ -396,12 +407,6 @@ var _ = Describe("Contour Ytt Templates", func() {
 	})
 
 	Context("Contour config file contents set", func() {
-		// Note, the data values for the tests here require the "#@overlay/replace"
-		// directive to be specified above "configFileContents" in order for these tests to
-		// pass. This is *not* required when passing in a data values file to ytt via
-		// --data-values-file. I believe it's just due to a difference in how
-		// ytt.RenderYTTTemplate is passing the data values in -- i.e. not via --data-values-file.
-
 		BeforeEach(func() {
 			values = contourConfigFileContents
 		})
@@ -514,14 +519,7 @@ var _ = Describe("Contour Ytt Templates", func() {
 			Expect(service.Spec.ExternalTrafficPolicy).To(Equal(corev1.ServiceExternalTrafficPolicyTypeLocal))
 		})
 	})
-
 	Context("Envoy service annotations specified", func() {
-		// Note, the data values for the tests here require the "#@overlay/replace"
-		// directive to be specified above "annotations" in order for these tests to
-		// pass. This is *not* required when passing in a data values file to ytt via
-		// --data-values-file. I believe it's just due to a difference in how
-		// ytt.RenderYTTTemplate is passing the data values in -- i.e. not via --data-values-file.
-
 		BeforeEach(func() {
 			values = envoyServiceAnnotations
 		})

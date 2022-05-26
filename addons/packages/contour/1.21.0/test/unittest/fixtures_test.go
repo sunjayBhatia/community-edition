@@ -32,7 +32,7 @@ const noCertificatesDuration string = `
 ---
 certificates:
   useCertManager: true
-  duration: 0
+  duration: ""
 `
 
 // noCertificatesRenewBefore has certificates.useCertManager set to true and
@@ -42,7 +42,7 @@ const noCertificatesRenewBefore string = `
 ---
 certificates:
   useCertManager: true
-  renewBefore: 0
+  renewBefore: ""
 `
 
 // noHostPortHTTP has envoy.hostPorts.enable set to true and
@@ -113,6 +113,19 @@ envoy:
       loadBalancerType: invalid-type
 `
 
+// invalidEnvoyServiceAnnotations has envoy.service.annotations set to an invalid type.
+const invalidEnvoyServiceAnnotations = `
+#@data/values
+---
+envoy:
+  service:
+    annotations:
+    - foo1: bar1
+      baz1: biz1
+    - foo2: bar2
+      baz2: biz2
+`
+
 // nonDefaultNamespace has namespace set to non-default-namespace.
 const nonDefaultNamespace string = `
 #@data/values
@@ -125,7 +138,6 @@ const contourConfigFileContents string = `
 #@data/values
 ---
 contour:
-  #@overlay/replace
   configFileContents:
     foo:
       bar: baz
@@ -260,7 +272,6 @@ const envoyServiceAnnotations = `
 ---
 envoy:
   service:
-    #@overlay/replace
     annotations:
       foo: bar
       boo: baz
@@ -274,7 +285,6 @@ const envoyServiceAnnotationsAWSNLB = `
 infrastructureProvider: aws
 envoy:
   service:
-    #@overlay/replace
     annotations:
       foo: bar
       boo: baz

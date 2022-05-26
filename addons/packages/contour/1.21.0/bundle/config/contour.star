@@ -110,6 +110,12 @@ def validate_envoy_service():
   if data.values.infrastructureProvider == "aws":
     data.values.envoy.service.aws.loadBalancerType in ("classic", "nlb") or assert.fail("envoy.service.aws.loadBalancerType must be either classic or nlb when infrastructureProvider is aws")
   end
+
+  if data.values.envoy.service.annotations:
+    annotations_kvs = struct.decode(data.values.envoy.service.annotations)
+    _, err = assert.try_to(lambda: annotations_kvs.items())
+    not err or assert.fail("envoy.service.annotations must be a key/value map")
+  end
 end
 
 validate_contour()
